@@ -5,35 +5,74 @@ const tipodeinput = input.dataset.tipo //con  .dataset le estamos indicando busc
   }
 
    if(input.validity.valid){
-    input.parentElement.classList.remove("input-container--invalid")
+    input.parentElement.classList.remove("input-container--invalid"); // con .parentElement.classList.remove("input-container--invalid") le estamos indicando al padre que si es true , quite la claase de invalido
+    input.parentElement.querySelector(".input-message-error").innerHTML = ""
   } else {
-    input.parentElement.classList.add("input-container--invalid")
+    input.parentElement.classList.add("input-container--invalid"); // con .parentElement.classList.add("input-container--invalid") le estamos indcando al padre que si es false , se le agregue la clase de error.
+    input.parentElement.querySelector(".input-message-error").innerHTML = mostrarmensajedeError(tipodeinput , input)
+
   }
 
 };
+
+
+const tipodeErrores = ["valueMissing" , 
+"typeMismatch" , 
+"patternMismatch" , 
+"customError" ,  ] 
 
 
 const mensajedeError = {
   nombre : {
-    valueMissing : "este campo no puede estar vacio"
+    valueMissing : "el campo nombre no puede estar vacio"
   },
   email : {
-    valueMissing : "este campo no puede estar vacio" ,
+    valueMissing : "el campo correo no puede estar vacio" ,
     typeMismatch : "el correo no es valido"
   },
   password : {
-    valueMissing : "este campo no puede estar vacio" ,
+    valueMissing : "el campo contraseña no puede estar vacio" ,
     patternMismatch : "al menos 6 caracteres con una MAYUSCULA, un numero y un caracter especial",
   },
   nacimiento : {
-    valueMissing : "este campo no puede estar vacio" ,
+    valueMissing : "el campo nacimiento no puede estar vacio" ,
     customError : "debes tener al menos 18 años ",
-  }
-}
+  },
+  numero : {
+   valueMissing : "este campo no puede estar vacio",
+   patternMismatch : "el formatorequerido es XXXXXXXXXXX 10 numeros"
+
+  },
+  direccion: {
+    valueMissing : "este campo no puede estar vacio",
+   patternMismatch : "la direcccion debe contener entre 10 y 40 caracteres"
+  },
+  ciudad: {
+    valueMissing : "este campo no puede estar vacio",
+   patternMismatch : "la direcccion debe contener entre 10 y 40 caracteres"
+  },
+  estado: {
+    valueMissing : "este campo no puede estar vacio",
+   patternMismatch : "la direcccion debe contener entre 10 y 40 caracteres"
+  },
+};
 
 const validadores = {
   nacimiento : (input) => validarnacimiento(input),
 };
+
+function mostrarmensajedeError (tipodeinput , input ) {
+  let mensaje = ""
+tipodeErrores.forEach( error => {
+  if(input.validity[error]){
+    console.log(tipodeinput ,error),
+   console.log(input.validity[error]);
+   console.log(mensajedeError [tipodeinput] [error]); 
+   mensaje = mensajedeError[tipodeinput][error];
+  }
+});
+  return mensaje
+}
 
 //con esta funcion estamos recibiendo la fecha ingresada por el cliente para despues compararla con la fecha actual
 function validarnacimiento(input)  {
